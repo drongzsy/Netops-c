@@ -5,9 +5,9 @@ from sqlalchemy import func as safunc
 from ..database import get_db
 from ..models.device import Device, DeviceStatus
 from ..models.task_record import TaskRecord, TaskStatus
-from ..services.auth import get_current_user
+from .agent import agent_auth
 
-router = APIRouter(dependencies=[Depends(get_current_user)])
+router = APIRouter(dependencies=[Depends(agent_auth)])
 
 
 @router.get("/stats")
@@ -40,3 +40,11 @@ def device_type_distribution(db: Session = Depends(get_db)):
 def recent_tasks(limit: int = 10, db: Session = Depends(get_db)):
     tasks = db.query(TaskRecord).order_by(TaskRecord.created_at.desc()).limit(limit).all()
     return tasks
+
+
+@router.get("/report")
+def inspection_report():
+    """Generate and return an HTML inspection report."""
+    from ..services.report_generator import generate_html_report
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(content=generate_html_report())

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import init_db
-from .routers import agent, agent_chat, auth, configs, credentials, dashboard, devices, monitor, tasks
+from .routers import agent, agent_chat, auth, configs, credentials, dashboard, devices, ipam, links, monitor, tasks, vlans
 from .services.scheduler import init_scheduler
 
 
@@ -31,6 +31,9 @@ def create_app() -> FastAPI:
     app.include_router(configs.router, prefix="/api/configs", tags=["configs"])
     app.include_router(monitor.router, prefix="/api/monitor", tags=["monitor"])
     app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
+    app.include_router(ipam.router)
+    app.include_router(links.router)
+    app.include_router(vlans.router)
     app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 
     @app.on_event("startup")

@@ -4,10 +4,10 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models.credential import Credential
 from ..schemas.credential import CredentialCreate, CredentialResponse, CredentialUpdate
-from ..services.auth import get_current_user
+from .agent import agent_auth
 from ..services.crypto import decrypt, encrypt
 
-router = APIRouter(dependencies=[Depends(get_current_user)])
+router = APIRouter(dependencies=[Depends(agent_auth)])
 
 
 def _to_response(cred: Credential) -> CredentialResponse:

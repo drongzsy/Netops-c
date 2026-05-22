@@ -27,7 +27,7 @@ import { onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { h } from 'vue'
 import { NIcon } from 'naive-ui'
-import { DashboardOutlined, DesktopOutlined, FileTextOutlined, OrderedListOutlined, AreaChartOutlined, KeyOutlined } from '@vicons/antd'
+import { DashboardOutlined, DesktopOutlined, FileTextOutlined, OrderedListOutlined, AreaChartOutlined, KeyOutlined, ClusterOutlined } from '@vicons/antd'
 import { auth } from './stores/auth'
 
 const router = useRouter()
@@ -36,6 +36,8 @@ const route = useRoute()
 const menuOptions = [
   { label: '仪表盘', key: '/', icon: () => h(NIcon, null, { default: () => h(DashboardOutlined) }) },
   { label: '设备', key: '/devices', icon: () => h(NIcon, null, { default: () => h(DesktopOutlined) }) },
+  { label: '链路', key: '/links', icon: () => h(NIcon, null, { default: () => h(ClusterOutlined) }) },
+  { label: 'IP 地址', key: '/ipam', icon: () => h(NIcon, null, { default: () => h(ClusterOutlined) }) },
   { label: '配置', key: '/config', icon: () => h(NIcon, null, { default: () => h(FileTextOutlined) }) },
   { label: '监控', key: '/monitor', icon: () => h(NIcon, null, { default: () => h(AreaChartOutlined) }) },
   { label: '凭据', key: '/credentials', icon: () => h(NIcon, null, { default: () => h(KeyOutlined) }) },

@@ -6,9 +6,9 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models.metric import Metric
-from ..services.auth import get_current_user
+from .agent import agent_auth
 
-router = APIRouter(dependencies=[Depends(get_current_user)])
+router = APIRouter(dependencies=[Depends(agent_auth)])
 
 
 @router.get("/{device_id}")

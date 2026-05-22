@@ -5,11 +5,11 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models.device import Device
-from ..models.user import User
+from ..models.firmware import FirmwareVersion
 from ..schemas.device import DeviceCreate, DeviceResponse, DeviceUpdate
-from ..services.auth import get_current_user
+from .agent import agent_auth
 
-router = APIRouter(dependencies=[Depends(get_current_user)])
+router = APIRouter(dependencies=[Depends(agent_auth)])
 
 
 @router.get("")
@@ -73,3 +73,26 @@ def delete_device(device_id: int, db: Session = Depends(get_db)):
     db.delete(device)
     db.commit()
     return {"ok": True}
+
+
+@router.get("/{device_id}/versions")
+def get_device_versions(device_id: int, db: Session = Depends(get_db)):
+    """查询设备的固件版本历史。"""
+    versions = db.query(FirmwareVersion).filter(
+        FirmwareVersion.device_id == device_id
+    ).order_by(FirmwareVersion.collected_at.desc()).limit(20).all()
+    return versions
+
+
+@router.post("/{device_id}/versions", status_code=201)
+def record_device_version(device_id: int, data: dict, db: Session = Depends(get_db)):
+    """记录设备固件版本。"""
+    fw = FirmwareVersion(
+        device_id=device_id,
+        version=data["version"],
+        patch=data.get("patch"),
+    )
+    db.add(fw)
+    db.commit()
+    db.refresh(fw)
+    return fw

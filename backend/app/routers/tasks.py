@@ -4,10 +4,10 @@ from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models.task_record import TaskRecord, TaskStatus, TaskType
-from ..services.auth import get_current_user
+from .agent import agent_auth
 from ..services.task_manager import execute_task_async
 
-router = APIRouter(dependencies=[Depends(get_current_user)])
+router = APIRouter(dependencies=[Depends(agent_auth)])
 
 
 class TaskCreate(BaseModel):

@@ -6,3 +6,7 @@ from .metric import Metric
 from .user import User
 from .agent_session import AgentSession
 from .audit_log import AuditLog
+from .ipam import IPSubnet, IPAddress
+from .link import NetworkLink
+from .vlan import VLAN
+from .firmware import FirmwareVersion
