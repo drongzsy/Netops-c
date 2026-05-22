@@ -64,6 +64,8 @@ def execute_task(task_id: int) -> None:
             _store_metrics(db, per_device, task.id)
         elif task.task_type == TaskType.COMPLIANCE:
             result["compliance"] = _build_compliance_result(per_device)
+        elif task.task_type == TaskType.COMMAND:
+            result["command_output"] = {str(did): out for did, out in per_device.items()}
         elif task.task_type == TaskType.PUSH:
             errors = _check_push_errors(per_device)
 
@@ -93,6 +95,7 @@ _PLAYBOOK_MAP = {
     TaskType.COLLECT: "collect_metrics.yml",
     TaskType.COMPLIANCE: "compliance_check.yml",
     TaskType.PUSH: "push_config.yml",
+    TaskType.COMMAND: "run_commands.yml",
 }
 
 

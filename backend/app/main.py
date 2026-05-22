@@ -4,7 +4,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import init_db
-from .routers import agent, auth, configs, credentials, dashboard, devices, monitor, tasks
+from .routers import agent, agent_chat, auth, configs, credentials, dashboard, devices, monitor, tasks
+from .services.scheduler import init_scheduler
 
 
 def create_app() -> FastAPI:
@@ -21,6 +22,7 @@ def create_app() -> FastAPI:
 
     # Public routes
     app.include_router(agent.router)
+    app.include_router(agent_chat.router)
     app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 
     # Protected routes
@@ -34,6 +36,10 @@ def create_app() -> FastAPI:
     @app.on_event("startup")
     def on_start() -> None:
         init_db()
+        try:
+            init_scheduler()
+        except Exception:
+            pass  # scheduler may fail in test environments w/o event loop
 
     @app.get("/api/health")
     def health() -> dict:

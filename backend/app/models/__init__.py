@@ -4,3 +4,5 @@ from .config_archive import ConfigArchive
 from .task_record import TaskRecord
 from .metric import Metric
 from .user import User
+from .agent_session import AgentSession
+from .audit_log import AuditLog

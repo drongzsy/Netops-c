@@ -58,6 +58,8 @@ def _extract_from_json_callback(
 
                 if "running config" in task_name.lower() or "get running" in task_name.lower():
                     per_device[did]["config_text"] = output_text
+                elif "execute cli" in task_name.lower() or "command" in task_name.lower():
+                    per_device[did]["command_output"] = output_text
                 elif "cpu" in task_name.lower():
                     per_device[did]["cpu_output"] = output_text
                 elif "memory" in task_name.lower():

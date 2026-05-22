@@ -11,6 +11,7 @@ class TaskType(str, enum.Enum):
     PUSH = "push"
     COLLECT = "collect"
     COMPLIANCE = "compliance"
+    COMMAND = "command"
 
 
 class TaskStatus(str, enum.Enum):
