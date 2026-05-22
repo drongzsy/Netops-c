@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import init_db
-from .routers import agent, agent_chat, alerts, auth, configs, credentials, dashboard, devices, ipam, links, monitor, tasks, vlans
+from .routers import agent, agent_chat, alerts, auth, configs, credentials, dashboard, devices, ipam, links, monitor, phase5, syslog_viewer, tasks, vlans
 from .services.scheduler import init_scheduler
 
 
@@ -35,6 +35,8 @@ def create_app() -> FastAPI:
     app.include_router(links.router)
     app.include_router(vlans.router)
     app.include_router(alerts.router)
+    app.include_router(syslog_viewer.router)
+    app.include_router(phase5.router)
     app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 
     @app.on_event("startup")
@@ -43,7 +45,13 @@ def create_app() -> FastAPI:
         try:
             init_scheduler()
         except Exception:
-            pass  # scheduler may fail in test environments w/o event loop
+            pass
+        try:
+            from .services.syslog_server import syslog_server
+            import asyncio
+            asyncio.ensure_future(syslog_server.start())
+        except Exception:
+            pass
 
     @app.get("/api/health")
     def health() -> dict:

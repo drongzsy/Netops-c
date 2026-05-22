@@ -11,3 +11,4 @@ from .link import NetworkLink
 from .vlan import VLAN
 from .firmware import FirmwareVersion
 from .alert_rule import AlertRule, AlertHistory
+from .syslog import SyslogEntry

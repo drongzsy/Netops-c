@@ -11,6 +11,7 @@ const routes = [
   { path: '/monitor', component: () => import('../views/Monitor.vue') },
   { path: '/credentials', component: () => import('../views/Credentials.vue') },
   { path: '/alerts', component: () => import('../views/Alerts.vue') },
+  { path: '/syslog', component: () => import('../views/Syslog.vue') },
   { path: '/tasks', component: () => import('../views/Tasks.vue') },
 ]
 
