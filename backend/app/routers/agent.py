@@ -216,27 +216,31 @@ def agent_diagnose_device(device_id: int, db: Session = Depends(get_db), _=Depen
     })
 
 
+class _TaskCreateRequest(BaseModel):
+    task_type: str
+    device_ids: list[int]
+    extra_vars: dict = {}
+
+
 @router.post("/tasks")
 def agent_create_task(
-    task_type: str,
-    device_ids: list[int],
-    extra_vars: dict = {},
+    data: _TaskCreateRequest,
     db: Session = Depends(get_db),
     _=Depends(agent_auth),
 ):
-    """Create an Ansible task (backup / collect / compliance / push)."""
+    """Create an Ansible task (backup / collect / compliance / push / command)."""
     try:
-        ttype = TaskType(task_type.lower())
+        ttype = TaskType(data.task_type.lower())
     except ValueError:
         return AgentResponse(
             success=False,
-            error=f"Invalid task type: {task_type}. Valid: backup, collect, compliance, push",
+            error=f"Invalid task type: {data.task_type}. Valid: backup, collect, compliance, push, command",
         )
 
     task = TaskRecord(
         task_type=ttype,
-        device_ids=device_ids,
-        result={"extra_vars": extra_vars} if extra_vars else None,
+        device_ids=data.device_ids,
+        result={"extra_vars": data.extra_vars} if data.extra_vars else None,
     )
     db.add(task)
     db.commit()
