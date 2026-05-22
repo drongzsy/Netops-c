@@ -1,0 +1,18 @@
+- name: Collect device metrics
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Get CPU usage
+      ansible.netcommon.cli_command:
+        command: display cpu-usage
+      register: cpu_output
+
+    - name: Get memory info
+      ansible.netcommon.cli_command:
+        command: display memory
+      register: mem_output
+
+    - name: Get interface stats
+      ansible.netcommon.cli_command:
+        command: display interface brief
+      register: intf_output

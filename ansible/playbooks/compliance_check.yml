@@ -1,0 +1,13 @@
+- name: Compliance check
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Get BGP config
+      ansible.netcommon.cli_command:
+        command: display bgp peer
+      register: bgp_output
+
+    - name: Get SNMP config
+      ansible.netcommon.cli_command:
+        command: display current-configuration | include snmp
+      register: snmp_output

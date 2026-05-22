@@ -1,0 +1,8 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Test ce_command with paramiko
+      community.network.ce_command:
+        commands: display clock
+      register: result
+    - debug: var=result.stdout_lines

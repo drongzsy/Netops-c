@@ -1,0 +1,7 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Test raw with network_cli
+      raw: display clock
+      register: result
+    - debug: var=result.stdout_lines

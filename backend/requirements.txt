@@ -1,0 +1,17 @@
+fastapi==0.115.0
+uvicorn==0.30.0
+sqlalchemy==2.0.35
+pymysql==1.1.1
+python-dotenv==1.0.1
+ansible-runner==2.4.0
+celery==5.4.0
+redis==5.1.0
+cryptography==43.0.0
+pydantic==2.9.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1  # pinned for passlib compatibility
+
+# Testing
+pytest==9.0.3
+httpx==0.28.1
