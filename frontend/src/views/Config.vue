@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, computed, h, onMounted } from 'vue'
+import { ref, computed, h, onMounted, onUnmounted } from 'vue'
 import { NButton, NTag, NSpace, useMessage } from 'naive-ui'
 import { deviceApi, configApi, taskApi } from '../api'
 
@@ -217,11 +217,11 @@ async function executeCompliance() {
     complianceStatus.value = { type: 'info', message: `合规检查任务已提交 (ID: ${data.id})，正在检测...` }
 
     // Poll for result
-    const poll = setInterval(async () => {
+    let pollIntervalId = setInterval(async () => {
       try {
         const { data: taskData } = await taskApi.get(data.id)
         if (taskData.status === 'success' || taskData.status === 'failed' || taskData.status === 'partial') {
-          clearInterval(poll)
+          clearInterval(pollIntervalId)
           complianceLoading.value = false
           const compliance = taskData.result?.compliance || {}
           const deviceChecks = compliance[String(complianceDevice.value)] || []
@@ -233,7 +233,7 @@ async function executeCompliance() {
           }
         }
       } catch {
-        clearInterval(poll)
+        clearInterval(pollIntervalId)
         complianceLoading.value = false
         complianceStatus.value = { type: 'error', message: '查询任务结果失败' }
       }
@@ -243,6 +243,8 @@ async function executeCompliance() {
     complianceStatus.value = { type: 'error', message: '提交失败: ' + (e.response?.data?.detail || e.message) }
   }
 }
+
+onUnmounted(() => { if (pollIntervalId) clearInterval(pollIntervalId) })
 
 const configColumns = [
   { title: '版本', key: 'version', width: 120 },

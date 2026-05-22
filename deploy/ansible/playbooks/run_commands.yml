@@ -1,0 +1,15 @@
+---
+- name: Run arbitrary CLI commands on devices
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Execute CLI commands
+      ansible.netcommon.cli_command:
+        command: "{{ item }}"
+      register: cmd_results
+      loop: "{{ commands | default([]) }}"
+      timeout: 60
+
+    - name: Combine outputs
+      ansible.builtin.set_fact:
+        combined_output: "{{ cmd_results.results | map(attribute='stdout_lines') | list }}"

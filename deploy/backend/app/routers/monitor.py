@@ -5,7 +5,6 @@ from sqlalchemy import func as safunc
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models.device import Device
 from ..models.metric import Metric
 from .agent import agent_auth
 

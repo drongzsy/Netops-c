@@ -119,8 +119,8 @@ class SyslogServer:
             )
             db.add(entry)
             db.commit()
-        except Exception as e:
-            _logger.warning("Failed to store syslog: %s", e)
+        except Exception:
+            pass
         finally:
             db.close()
 

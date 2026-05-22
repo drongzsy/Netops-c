@@ -1,0 +1,24 @@
+- name: Backup device configuration
+  hosts: all
+  gather_facts: no
+  vars:
+    backup_dir: "{{ playbook_dir }}/../backups"
+  tasks:
+    - name: Ensure backup directory exists
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+      delegate_to: localhost
+      run_once: yes
+
+    - name: Get running config
+      ansible.netcommon.cli_command:
+        command: display current-configuration
+      register: config_output
+      timeout: 60
+
+    - name: Save config to local file
+      copy:
+        content: "{{ config_output.stdout }}"
+        dest: "{{ backup_dir }}/{{ inventory_hostname }}_{{ '%Y%m%d_%H%M%S' | strftime }}.cfg"
+      delegate_to: localhost

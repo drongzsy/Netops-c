@@ -1,11 +1,7 @@
-import logging
 import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 from .database import init_db
 from .routers import agent, agent_chat, alerts, auth, configs, credentials, dashboard, devices, ipam, links, monitor, phase5, syslog_viewer, tasks, vlans
@@ -48,14 +44,14 @@ def create_app() -> FastAPI:
         init_db()
         try:
             init_scheduler()
-        except Exception as e:
-            logger.warning("Scheduler initialization failed: %s", e)
+        except Exception:
+            pass
         try:
             from .services.syslog_server import syslog_server
             import asyncio
             asyncio.ensure_future(syslog_server.start())
-        except Exception as e:
-            logger.warning("Syslog server initialization failed: %s", e)
+        except Exception:
+            pass
 
     @app.get("/api/health")
     def health() -> dict:

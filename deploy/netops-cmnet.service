@@ -1,0 +1,19 @@
+[Unit]
+Description=NetOps CMNET Backend API
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=simple
+User=netops
+Group=netops
+WorkingDirectory=/opt/netops/backend
+EnvironmentFile=/opt/netops/backend/.env
+ExecStart=/opt/netops/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 2
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
