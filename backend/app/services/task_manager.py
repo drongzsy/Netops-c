@@ -137,14 +137,20 @@ def _store_configs(db, per_device: dict[int, dict], task_id: int) -> None:
 
 def _store_metrics(db, per_device: dict[int, dict], task_id: int) -> None:
     now = datetime.utcnow()
+    from .alerts import check_metric
     for device_id, outputs in per_device.items():
+        device = db.query(Device).filter(Device.id == device_id).first()
+        dev_name = device.name if device else str(device_id)
+
         cpu_val = parse_cpu(outputs.get("cpu_output", ""))
         if cpu_val is not None:
             db.add(Metric(device_id=device_id, metric_type="cpu", value=cpu_val, unit="%", collected_at=now))
+            check_metric(device_id, dev_name, "cpu", cpu_val)
 
         mem_val = parse_memory(outputs.get("mem_output", ""))
         if mem_val is not None:
             db.add(Metric(device_id=device_id, metric_type="memory", value=mem_val, unit="%", collected_at=now))
+            check_metric(device_id, dev_name, "memory", mem_val)
 
         intf_metrics = parse_interfaces(outputs.get("intf_output", ""))
         for im in intf_metrics:
@@ -156,6 +162,8 @@ def _store_metrics(db, per_device: dict[int, dict], task_id: int) -> None:
                 interface_name=im["interface"],
                 collected_at=now,
             ))
+            if im["type"] == "interface_down":
+                check_metric(device_id, dev_name, "interface_down", im["value"])
     db.commit()
 
 

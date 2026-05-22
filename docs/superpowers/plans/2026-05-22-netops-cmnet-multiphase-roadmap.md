@@ -15,9 +15,9 @@
 | 阶段 | 内容 | 状态 |
 |------|------|------|
 | **Phase 1: 基础框架** | Ansible整合 + CRUD + Web UI + Auth | ✅ **已完成** |
-| **Phase 2: AI + 运维增强** | AI Agent接入层 + 批量命令 + 定时任务 + 测试 | 🔄 **当前阶段** |
-| **Phase 3: 资源与报表** | IPAM + 链路管理 + 巡检报告 + VLAN | 📋 待开始 |
-| **Phase 4: 监控与告警** | 告警引擎 + 延迟监控 + SLA + 报表 | 📋 待开始 |
+| **Phase 2: AI + 运维增强** | AI Agent接入层 + 批量命令 + 定时任务 + 测试 | ✅ **已完成** |
+| **Phase 3: 资源与报表** | IPAM + 链路管理 + 巡检报告 + VLAN | ✅ **已完成** |
+| **Phase 4: 监控与告警** | 告警引擎 + 延迟监控 + SLA + 报表 | 🔄 **当前阶段** |
 | **Phase 5: 日志与智能** | Syslog接收 + 故障辅助 + 智能巡检 | 📋 远期规划 |
 
 ---
@@ -545,9 +545,34 @@ Run: `git add backend/app/services/scheduler.py backend/app/services/audit.py ba
 ✅ 自然语言指令入口可用
 ✅ 操作确认工作流 (AI提议→用户确认→执行)
 ✅ 批量命令执行
-✅ 集成测试 40+ 通过
+✅ 集成测试 43+ 通过
 ✅ 每日定时备份 + 每4小时性能采集
 ✅ 用户操作审计日志
+```
+
+
+## Phase 3: 资源与报表 ✅ 已完成
+
+### 交付内容
+
+| 功能 | 详情 | 状态 |
+|------|------|------|
+| IP 地址管理 (IPAM) | 子网创建/删除、地址池自动生成、分配/预留/释放、VLAN/VRF 关联 | ✅ |
+| 链路/端口管理 | 设备间互联链路 CRUD、带宽/类型/状态管理 | ✅ |
+| VLAN 管理 | VLAN ID 规划、名称/用途/位置管理 | ✅ |
+| 固件版本管理 | 设备 VRP 版本记录和查询 | ✅ |
+| 巡检报告生成 | HTML 格式报告：设备状态+性能+任务统计 | ✅ |
+| 认证统一 | 所有路由同时支持 JWT + API-Key | ✅ |
+| 前端页面 | IPAM/Links 新页面 + 菜单集成 | ✅ |
+
+### Codebase (累计)
+
+```
+Phase 1+2+3: 113 files, 9,647+ lines
+Backend:  70+ files (models + routers + services + schemas)
+Frontend: 18 files (9 views + 3 components + api + router + store)
+Ansible:  12 files (5 playbooks + config + tests)
+Tests:    43 passing
 ```
 
 ---
@@ -795,6 +820,7 @@ Run: `git commit -m "feat: add alert rules engine and notification"`
 
 ## Phase 5: 日志与智能运维 📋 远期规划
 
+
 ### 目标
 
 引入 Syslog 接收、故障辅助分析、AI 智能巡检。
@@ -822,14 +848,14 @@ Run: `git commit -m "feat: add alert rules engine and notification"`
 
 | 阶段 | 任务 | 预估 | 优先级 |
 |------|------|------|--------|
-| **Phase 2** | AI 智能体接入层 (Tool Defs + NL + 确认流) | 40min | **P0** |
-| | 批量命令执行 | 15min | **P0** |
-| | 集成测试 + E2E 测试 | 25min | **P0** |
-| | 定时任务 + 审计日志 | 20min | P1 |
-| **Phase 3** | IP 地址管理 (IPAM) | 40min | **P0** |
-| | 链路管理 | 25min | P1 |
-| | 巡检报告 | 20min | P1 |
-| | VLAN + 版本管理 | 15min | P1 |
+| **Phase 2** | AI 智能体接入层 (Tool Defs + NL + 确认流) | 40min | ✅ |
+| | 批量命令执行 | 15min | ✅ |
+| | 集成测试 + E2E 测试 | 25min | ✅ |
+| | 定时任务 + 审计日志 | 20min | ✅ |
+| **Phase 3** | IP 地址管理 (IPAM) | 40min | ✅ |
+| | 链路管理 | 25min | ✅ |
+| | 巡检报告 | 20min | ✅ |
+| | VLAN + 版本管理 | 15min | ✅ |
 | **Phase 4** | 告警规则引擎 | 25min | P1 |
 | | 延迟监控 | 15min | P2 |
 | | SLA + 日报 | 20min | P2 |

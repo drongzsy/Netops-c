@@ -57,3 +57,31 @@ def latest_metrics(device_id: int, db: Session = Depends(get_db)):
         .all()
     )
     return latest
+
+
+@router.get("/{device_id}/ping")
+def ping_device(device_id: int, db: Session = Depends(get_db)):
+    """Quick TCP ping to check device reachability."""
+    device = db.query(Device).filter(Device.id == device_id).first()
+    if not device:
+        return {"device_id": device_id, "reachable": False, "error": "Device not found"}
+
+    ip = device.ip_address
+    port = 22
+    try:
+        start = datetime.utcnow()
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(3)
+        result = sock.connect_ex((ip, port))
+        elapsed = (datetime.utcnow() - start).total_seconds() * 1000
+        sock.close()
+        return {
+            "device_id": device_id,
+            "name": device.name,
+            "ip": ip,
+            "reachable": result == 0,
+            "latency_ms": round(elapsed, 1) if result == 0 else None,
+            "port": port,
+        }
+    except Exception as e:
+        return {"device_id": device_id, "name": device.name, "ip": ip, "reachable": False, "latency_ms": None, "error": str(e)}

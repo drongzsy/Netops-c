@@ -42,6 +42,25 @@ def recent_tasks(limit: int = 10, db: Session = Depends(get_db)):
     return tasks
 
 
+@router.get("/sla")
+def sla_summary(db: Session = Depends(get_db)):
+    """SLA 统计摘要：任务成功率、设备在线率、采集覆盖率。"""
+    total_dev = db.query(Device).count()
+    online_dev = db.query(Device).filter(Device.status == DeviceStatus.ONLINE).count()
+    total_tasks = db.query(TaskRecord).count()
+    success_tasks = db.query(TaskRecord).filter(TaskRecord.status == TaskStatus.SUCCESS).count()
+    failed_tasks = db.query(TaskRecord).filter(TaskRecord.status == TaskStatus.FAILED).count()
+    return {
+        "device_online_rate": round(online_dev / total_dev * 100, 1) if total_dev else 0,
+        "task_success_rate": round(success_tasks / total_tasks * 100, 1) if total_tasks else 100.0,
+        "total_tasks": total_tasks,
+        "success_tasks": success_tasks,
+        "failed_tasks": failed_tasks,
+        "total_devices": total_dev,
+        "online_devices": online_dev,
+    }
+
+
 @router.get("/report")
 def inspection_report():
     """Generate and return an HTML inspection report."""

@@ -40,6 +40,7 @@ const menuOptions = [
   { label: 'IP 地址', key: '/ipam', icon: () => h(NIcon, null, { default: () => h(ClusterOutlined) }) },
   { label: '配置', key: '/config', icon: () => h(NIcon, null, { default: () => h(FileTextOutlined) }) },
   { label: '监控', key: '/monitor', icon: () => h(NIcon, null, { default: () => h(AreaChartOutlined) }) },
+  { label: '告警', key: '/alerts', icon: () => h(NIcon, null, { default: () => h(AreaChartOutlined) }) },
   { label: '凭据', key: '/credentials', icon: () => h(NIcon, null, { default: () => h(KeyOutlined) }) },
   { label: '任务', key: '/tasks', icon: () => h(NIcon, null, { default: () => h(OrderedListOutlined) }) },
 ]

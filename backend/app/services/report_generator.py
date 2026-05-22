@@ -19,6 +19,9 @@ def _query_stats(db) -> dict:
     failed_tasks = db.query(TaskRecord).filter(TaskRecord.status == TaskStatus.FAILED).count()
     success_tasks = db.query(TaskRecord).filter(TaskRecord.status == TaskStatus.SUCCESS).count()
 
+    # SLA: task success rate
+    sla_rate = round(success_tasks / today_tasks * 100, 1) if today_tasks else 100.0
+
     # Latest metrics per device (CPU example)
     devices = db.query(Device).all()
     device_metrics = []
@@ -43,6 +46,7 @@ def _query_stats(db) -> dict:
         "today_tasks": today_tasks,
         "failed_tasks": failed_tasks,
         "success_tasks": success_tasks,
+        "sla_rate": sla_rate,
         "device_metrics": device_metrics,
         "config_archives": config_count,
     }
@@ -79,6 +83,7 @@ th {{ background: #fafafa; font-weight: 600; }}
   <div class="card"><div class="num">{today_tasks}</div><div class="label">累计任务</div></div>
   <div class="card"><div class="num" style="color:#52c41a">{success_tasks}</div><div class="label">成功</div></div>
   <div class="card"><div class="num" style="color:#ff4d4f">{failed_tasks}</div><div class="label">失败</div></div>
+  <div class="card"><div class="num">{sla_rate}%</div><div class="label">SLA 成功率</div></div>
   <div class="card"><div class="num">{config_archives}</div><div class="label">配置存档</div></div>
 </div>
 
