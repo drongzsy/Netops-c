@@ -1,38 +1,22 @@
-# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
-venv/
-*.db
-
-# Environment
 .env
-!.env.example
-
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.env.local
-
-# IDE
-.idea/
-.vscode/
-*.swp
-
-# OS
-.DS_Store
+.encryption_key
+node_modules/
+dist/
+*.db
 Thumbs.db
-
-# Ansible
-ansible/playbooks/.run_ansible.sh
+.DS_Store
 ansible/backups/
-
-# Encryption keys
-backend/.encryption_key
-
-# Stray paths (Windows mount artifacts)
-backend/C:/
-
-# Claude Code user config
-.claude/
+_check_*.py
+_config_*.py
+_fix_*.py
+_refresh_*.py
+_scan_*.py
+_setup_*.py
+_test_*.py
+_pubkey_*.py
+_ssh_*.py
+mcp-server/
